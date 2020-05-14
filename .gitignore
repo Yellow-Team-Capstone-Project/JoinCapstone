@@ -1,3 +1,4 @@
 node_modules
 public/bundle*
 .env
+firebaseConfig.js
