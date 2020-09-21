@@ -5,7 +5,4 @@ Programmable Video, direct messaging leveraging the realtime
 capabilities of Google Cloud Firestore, and calendar to keep track
 of networking appointments.
 
-The APIs used were:
--Twilio
--Swal
--FullCalendar
+The APIs used were:Twilio, Swal and FullCalendar
