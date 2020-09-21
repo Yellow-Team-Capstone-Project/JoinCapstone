@@ -2,7 +2,8 @@ import React from 'react'
 import swal from '@sweetalert/with-react'
 import {connect} from 'react-redux'
 import {changeEvent} from '../../store/events'
-import{deleteMeeting,fetchMeetings} from '../../store/meetings'
+import{fetchMeetings} from '../../store/meetings'
+import {deleteEvent,} from '../../store/events';
 import {fetchUpcomingMeetings} from '../../store/upcomingMeetings'
 
 class DeleteMeeting extends React.Component{
@@ -52,7 +53,7 @@ class DeleteMeeting extends React.Component{
 }
 
 const mapDispatch =(dispatch)=>({
-    removeMeeting:(event)=>dispatch(deleteMeeting(event)),
+    removeMeeting:(event)=>dispatch(deleteEvent(event)),
     updateMeetingStatus:(event)=>dispatch(changeEvent(event)),
     statusChanged:(user)=>dispatch(fetchMeetings(user)),
     upcomingGone:(user)=>dispatch(fetchUpcomingMeetings(user))
