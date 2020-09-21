@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import swal from "@sweetalert/with-react";
 
+//allows users to edit their event
+
 class UpdateEvent extends Component {
 	constructor(props) {
 		super(props);

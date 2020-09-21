@@ -6,12 +6,14 @@ import{fetchMeetings} from '../../store/meetings'
 import {deleteEvent,} from '../../store/events';
 import {fetchUpcomingMeetings} from '../../store/upcomingMeetings'
 
+//This component allows users to delete an event they scheduled for themself, delete a meeting request, and or 'accept' or 'decline' a meeting invite
+
 class DeleteMeeting extends React.Component{
     constructor(props){
         super(props)
 
-    this.deleteMeeting=this.deleteMeeting.bind(this)
-    this.addMeeting=this.addMeeting.bind(this)
+    this.deleteMeeting=this.deleteMeeting.bind(this)  //adding the delete meeting function and binding it to our class component
+    this.addMeeting=this.addMeeting.bind(this)  //adding the add meeting function and binding it to our class component
     }
 
     deleteMeeting(){
@@ -38,9 +40,9 @@ class DeleteMeeting extends React.Component{
     }
 
      addMeeting(){
-        this.props.meeting.start = new Date(this.props.meeting.start).valueOf()
-         this.props.updateMeetingStatus(this.props.meeting)
-        this.props.statusChanged(this.props.user)
+        this.props.meeting.start = new Date(this.props.meeting.start).valueOf()  //changing the meeting start into the primitive value using .valuerOf so that our database can store it and read it easier
+         this.props.updateMeetingStatus(this.props.meeting) //this is used to update an already existing meeting on both users end and add this meeting to a confirmed event in the recipients calendar
+        this.props.statusChanged(this.props.user) // after we update a meeting we want the meetings to re- render on the state sp that it act88ually shows upp on the recipients calendar
     }
 
     render(){

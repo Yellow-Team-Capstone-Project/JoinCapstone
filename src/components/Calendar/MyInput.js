@@ -12,7 +12,6 @@ class MyInput extends Component {
     this.state = {
       eventTitle: '',
       eventDate: this.props.date?this.props.date.date:new Date()
-    //   eventDescription:''
     };
     this.changeText=this.changeText.bind(this)
    this.changeDate=this.changeDate.bind(this)

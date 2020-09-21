@@ -1,13 +1,16 @@
 import React from 'react';
+import swal from '@sweetalert/with-react'
 import './sidebar.css';
 import { fetchMeetings } from '../../store/meetings';
 import { fetchUpcomingMeetings } from '../../store/upcomingMeetings';
 import { connect } from 'react-redux';
 import DeleteMeeting from './DeleteMeeting';
+import {deleteEvent} from '../../store/events'
 
 class Sidebar extends React.Component {
   constructor() {
     super();
+    this.cancelMeeting= this.cancelMeeting.bind(this)
   }
 
   componentDidMount() { // getting all pending meetings that haven't been cconfirmed and upcoming meeting for the current day on the mount
@@ -15,9 +18,31 @@ class Sidebar extends React.Component {
     this.props.upcomingMeetings(this.props.user);
   }
 
+  cancelMeeting(meeting){ //Canceling the upcoming meeting with another user and cancels it from both calendars, need to setup alert to inform other attendee when meeting has been canceled by another attendee
+    swal({
+      title: "Are you sure?",
+     text: "Once canceled it will be deleted and you will not be able to recover this meeting!",
+     icon: "warning",
+     buttons: {
+       cancel:true,
+       confirm:{
+         text:'Cancel',
+         value:meeting
+       }
+     },
+     }).then(value=>{
+               this.props.removeMeeting(value)
+               this.props.upcomingGone(this.props.user)
+             swal({
+               title:'Meeting canceled',
+               icon:'success'
+             })
+         
+     })
+  }
+
   render() {
     const upcoming = this.props.upcoming;
-    console.log(upcoming, 'strawberry')
     const meetings = this.props.meetings;
     const user = this.props.user;
     upcoming.filter(
@@ -36,7 +61,7 @@ class Sidebar extends React.Component {
           <div className="meeting-list">
             <h3>UPCOMING</h3>
             {upcoming === []
-              ? 'No Upcoming Meetings'
+              ? <div className="upcoming-meeting"><h1>No Upcoming Meetings</h1></div>
               : upcoming.map((meeting) =>
                   meeting.inviteFirst ? (
                     <div className="upcoming-meeting">
@@ -53,7 +78,7 @@ class Sidebar extends React.Component {
                         <button
                           type="button"
                           className="button meeting-button"
-                          id="start-call-button"
+                          id="start-call-button" // setup onClick feature to start video call from calendar view
                         >
                           Start Meeting
                         </button>
@@ -67,6 +92,7 @@ class Sidebar extends React.Component {
                         <button
                           type="button"
                           className="button delete-button meeting-button"
+                          onClick={this.cancelMeeting(meeting)}
                         >
                           Cancel
                         </button>
@@ -88,7 +114,7 @@ class Sidebar extends React.Component {
           </div>
           <div>
             <h3 className="meeting-list">PENDING</h3>
-            {meetings.map((meeting) => {
+           {meetings!==[] ? meetings.map((meeting) => {
               if (meeting.hostId === user.uid) { //If you are the person who sent the meeting request and are waiting for another person to accept
                 return (
                   <div className="meeting">
@@ -119,7 +145,7 @@ class Sidebar extends React.Component {
                   </div>
                 );
               }
-            })}
+            }): <h1>PLease show up!!!</h1>}
           </div>
         </div>
       </section>
@@ -136,6 +162,8 @@ const mapState = (state) => ({ //making sure we have all meetings and upcoming m
 const mapDispatch = (dispatch) => ({ //dispatching to get any meetings sent to me and all meetings for the current day
   pendingMeetings: (user) => dispatch(fetchMeetings(user)),
   upcomingMeetings: (user) => dispatch(fetchUpcomingMeetings(user)),
+  removeMeeting:(meeting)=> dispatch(deleteEvent(meeting)),
+  upcomingGone:(user)=>dispatch(fetchUpcomingMeetings(user))
 });
 
 export default connect(mapState, mapDispatch)(Sidebar);

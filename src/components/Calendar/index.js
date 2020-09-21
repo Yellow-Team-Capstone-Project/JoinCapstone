@@ -50,7 +50,7 @@ class Calendar extends React.Component {
                 content: (
                   <UpdateEvent
                     event={info.event}
-                    update={this.props.updateEvent}
+                    update={this.props.updateEvent} //update event is a seperate component to let users edit an event. Had to nest it inside of a sweer alert becuase you can't have an update but natively with the API
                   />
                 ),
                 buttons: {
@@ -84,17 +84,17 @@ class Calendar extends React.Component {
                 });
               });
             }}
-            dateClick={(evt) =>
+            dateClick={(evt) =>  //adding a new event to calendar
               swal({
                 title: 'Create Event',
-                content: <MyInput date={evt} />,
+                content: <MyInput date={evt} />, //you have to use content in Swal to get in more descriptive form input fields
                 buttons: {
                   cancel: true,
                   confirm: 'Add Event',
                 },
               }).then((val) => {
                 this.props.addEvent(this.props.user, val.value);
-                this.props.checkUpcomingMeetings(this.props.user)
+                this.props.checkUpcomingMeetings(this.props.user) //checking to see if the event added is for the same day
                 swal({
                   title: 'Event Created',
                   text: 'Event: ' + val.value.title + ', was created!',
