@@ -10,12 +10,13 @@ class Sidebar extends React.Component {
     super();
   }
 
-  componentDidMount() {
+  componentDidMount() { // getting all pending meetings that haven't been cconfirmed and upcoming meeting for the current day on the mount
     this.props.pendingMeetings(this.props.user);
     this.props.upcomingMeetings(this.props.user);
   }
 
   render() {
+    console.log(upcoming, 'strawberry')
     const upcoming = this.props.upcoming;
     const meetings = this.props.meetings;
     const user = this.props.user;
@@ -35,7 +36,7 @@ class Sidebar extends React.Component {
           <div className="meeting-list">
             <h3>UPCOMING</h3>
             {upcoming === []
-              ? 'No Updoming Meetings'
+              ? 'No Upcoming Meetings'
               : upcoming.map((meeting) =>
                   meeting.inviteFirst ? (
                     <div className="upcoming-meeting">
@@ -72,10 +73,15 @@ class Sidebar extends React.Component {
                       </div>
                     </div>
                   ) : (
-                    <div>
-                      {meeting.title} @ {meeting.start}
+                    <div className="upcoming-meeting">
+                      <div className='meeting-content'>
+                      <b>Title:</b>{meeting.title} 
+                      <br/>
+                      <b>Date & Time:</b> {meeting.start}
                       <br />
-                      attendee(s): {meeting.host}
+                      <b>Attendee(s):</b> {meeting.host}
+                      <DeleteMeeting meeting={meeting} user={user} host={meeting.host} />
+                      </div>
                     </div>
                   )
                 )}
@@ -83,7 +89,7 @@ class Sidebar extends React.Component {
           <div>
             <h3 className="meeting-list">PENDING</h3>
             {meetings.map((meeting) => {
-              if (meeting.hostId === user.uid) {
+              if (meeting.hostId === user.uid) { //If you are the person who sent the meeting request and are waiting for another person to accept
                 return (
                   <div className="meeting">
                     <div className="meeting-content">
@@ -121,13 +127,13 @@ class Sidebar extends React.Component {
   }
 }
 
-const mapState = (state) => ({
+const mapState = (state) => ({ //making sure we have all meetings and upcoming meetings for the user on the state
   meetings: state.meetings,
   user: state.user,
   upcoming: state.upcomingMeetings,
 });
 
-const mapDispatch = (dispatch) => ({
+const mapDispatch = (dispatch) => ({ //dispatching to get any meetings sent to me and all meetings for the current day
   pendingMeetings: (user) => dispatch(fetchMeetings(user)),
   upcomingMeetings: (user) => dispatch(fetchUpcomingMeetings(user)),
 });

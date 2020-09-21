@@ -11,7 +11,8 @@ export const getUpcoming =(meetings)=>({
 
 export const fetchUpcomingMeetings = (user) =>{
     return async(dispatch)=>{
-        try{ let eventRefs = db.collection('events') 
+        try{
+            let eventRefs = db.collection('events') 
             let snap = await eventRefs.where('attendees','array-contains',user.uid).get()
             const someEvents=[]
             snap.forEach(doc=>someEvents.push({id:doc.id,...doc.data()}))
