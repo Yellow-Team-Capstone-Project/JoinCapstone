@@ -16,8 +16,8 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    console.log(upcoming, 'strawberry')
     const upcoming = this.props.upcoming;
+    console.log(upcoming, 'strawberry')
     const meetings = this.props.meetings;
     const user = this.props.user;
     upcoming.filter(
@@ -79,8 +79,8 @@ class Sidebar extends React.Component {
                       <br/>
                       <b>Date & Time:</b> {meeting.start}
                       <br />
-                      <b>Attendee(s):</b> {meeting.host}
-                      <DeleteMeeting meeting={meeting} user={user} host={meeting.host} />
+                      <b>Attendee(s):</b> {meeting.host ? meeting.host : meeting.hostFirst}
+                      <DeleteMeeting meeting={meeting} user={user} host={meeting.host ? meeting.host : meeting.hostFirst} />
                       </div>
                     </div>
                   )

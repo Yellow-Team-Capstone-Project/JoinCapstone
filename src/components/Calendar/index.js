@@ -15,6 +15,7 @@ import {
   changeEvent,
   deleteEvent,
 } from '../../store/events';
+import { fetchUpcomingMeetings } from '../../store/upcomingMeetings';
 
 import './main.scss'; // webpack must be configured to do this
 
@@ -92,8 +93,8 @@ class Calendar extends React.Component {
                   confirm: 'Add Event',
                 },
               }).then((val) => {
-                console.log('oranges', val.value);
                 this.props.addEvent(this.props.user, val.value);
+                this.props.checkUpcomingMeetings(this.props.user)
                 swal({
                   title: 'Event Created',
                   text: 'Event: ' + val.value.title + ', was created!',
@@ -112,6 +113,7 @@ const mapDispatch = (dispatch) => ({
   addEvent: (user, event) => dispatch(newEvent(user, event)),
   updateEvent: (user, event) => dispatch(changeEvent(user, event)),
   removeEvent: (event) => dispatch(deleteEvent(event)),
+  checkUpcomingMeetings:(user)=>dispatch(fetchUpcomingMeetings(user))
 });
 const mapState = (state) => ({
   user: state.user,
